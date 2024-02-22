@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react"
+import Routing from "../src/Router";
+import { DataContext } from "./Components/DataProvider/DataProvider";
+import { Type } from "./Utility/action.type";
+import { auth } from "./Utility/firebase";
+import { useContext } from "react";
+
 
 function App() {
+
+  const [{user}, dispatch] = useContext(DataContext)
+  useEffect(()=>{
+    auth.onAuthStateChanged((authUser)=>{
+      if(authUser){
+        // console.log(authUser)
+        dispatch({
+          type:Type.SET_USER,
+          user: null,
+        });
+      }
+    }
+    );
+  }, [])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Routing />
     </div>
   );
-}
+  }
 
-export default App;
+export default App
